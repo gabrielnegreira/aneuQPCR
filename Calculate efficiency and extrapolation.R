@@ -21,7 +21,7 @@ amp_curves <- as.data.frame(read_delim(amp_curves,  locale = locale(decimal_mark
 
 #set number of amplification cycles
 ncycles <- 40
-threshold <- 2
+threshold <- 1
 
 #format the table to convert it to a cycle X Well matrix
 rownames(amp_curves) <- amp_curves$Index #set the cycle number to the row name
@@ -42,7 +42,7 @@ qPCRobj <- suppressWarnings(fit_model_LL5(qPCRobj))
 qPCRobj <- calc_Cts(qPCRobj, threshold = threshold)
 
 #check if threshold line is well set
-plot_amps(qPCRobj, threshold_line = threshold)
+plot_amps(qPCRobj, threshold_line = threshold, scale = "log2")
 
 #save the excel file
 xlsx::write.xlsx(qPCRobj$metadata$well_meta, file = "per_well_calculations.xlsx", row.names = FALSE)

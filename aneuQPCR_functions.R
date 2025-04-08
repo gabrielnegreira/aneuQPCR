@@ -237,14 +237,12 @@ calc_copy_number <- function(qPCRobj, ref_target = "chr36", ref_target_copy = 2,
 
 #plot_amps####
 #this function simply plots the amplification curves
-plot_amps <- function(qPCRobj, threshold_line = NULL, group_by = NULL, split_by = NULL){
-  library(dplyr)
-  library(ggplot2)
+plot_amps <- function(qPCRobj, threshold_line = NULL, group_by = NULL, split_by = NULL, scale = c("original", "log2")){
+  
+  scale <- match.arg(scale)
   
   wells_info <- qPCRobj$metadata$well_meta
   raw_data <- qPCRobj$data$amp_curves
-  
-  
   
   to_plot <- raw_data %>%
     t() %>%
@@ -261,6 +259,7 @@ plot_amps <- function(qPCRobj, threshold_line = NULL, group_by = NULL, split_by 
   plot <- to_plot %>%
     ggplot(aes(x = cycle, y = fluorescence, color = .data[[group_by]], group = well))+
     geom_line()+
+    {if(scale == "log2")scale_y_continuous(transform = "log2")}+
     {if(is.numeric(threshold_line))geom_hline(yintercept=threshold_line, linetype = "dashed")}+
     {if(group_by == "well")guides(color = "none")}+
     {if(!is.null(split_by))facet_wrap(vars(.data[[split_by]]))}
