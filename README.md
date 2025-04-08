@@ -13,8 +13,6 @@ Ramakers, C., Ruijter, J. M., Deprez, R. H. L., & Moorman, A. F. M. (2003).
 Assumption-free analysis of quantitative real-time polymerase chain reaction (PCR) data.
 Neuroscience Letters, 339(1), 62–66. https://doi.org/10.1016/S0304-3940(02)01423-4
 
-Perfect! Here’s a clear and concise “How it works” section based on your explanation:
-
 ## How it works
 
 To estimate PCR efficiency and infer initial target DNA concentrations, the following steps are done:
@@ -25,7 +23,7 @@ To estimate PCR efficiency and infer initial target DNA concentrations, the foll
 2. **LL5 Model Fitting**  
    A 5-parameter logistic (LL5) model is fit to the log₂-transformed data for each PCR reaction. This model captures the full amplification curve and enables precise identification of curve features.
 
-3. **Inflection Point and Linear Region Detection**  
+3. **Linear Region Detection**  
    Using the LL5 model’s derivatives, the script identifies the linear amplification region and determines the inflection point—where the PCR efficiency begins to decline.
 
 4. **Linear Model Fitting**  
@@ -35,6 +33,10 @@ To estimate PCR efficiency and infer initial target DNA concentrations, the foll
    - The **efficiency** of the PCR is calculated as 2^slope of the fitted linear model.  
    - The **initial amount of target DNA** (at cycle 0) is estimated as 2^intercept, representing the extrapolated fluorescence signal at the start of amplification.
 
-All these steps are carried out by the `fit_model_LL5()` function, which takes as input a `qPCRobj` object. 
+All these steps are carried out by the `fit_model_LL5()` function, which takes as input a `qPCRobj` object (see below).
+
+This is an example of the LL5 model and the inference of initial concentration at log2 scale:
+  ![LL5 model example](figures/LL5_model_example.png)
+The dots represent the raw values, while the black line shows the LL5 model. The red line highlights the exponential amplification part, while the dashed green line show the inflection point. Lastly, the dashed blue line shows the linear model. 
 
 ---
