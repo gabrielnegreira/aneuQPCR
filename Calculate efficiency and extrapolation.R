@@ -43,3 +43,6 @@ qPCRobj <- calc_Cts(qPCRobj, threshold = threshold)
 
 #check if threshold line is well set
 plot_amps(qPCRobj, threshold_line = threshold)
+
+#save the excel file
+xlsx::write.xlsx(qPCRobj$metadata$well_meta, file = "per_well_calculations.xlsx", row.names = FALSE)
