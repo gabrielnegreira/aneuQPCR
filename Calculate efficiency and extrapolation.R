@@ -1,6 +1,17 @@
 #This is a script that will use the aneuQPCR functions to calculate the efficiency and extrapolate initial fluoresceces for each well in a qPCR.
 #This expects a tsv file exported from the LightCycler480 software. 
 
+#set working directory to the place where the script is located (only works with rstudio)
+if (!requireNamespace("rstudioapi", quietly = TRUE)) {
+  install.packages("rstudioapi")
+}
+
+if (rstudioapi::isAvailable()) {
+  script_dir <- dirname(rstudioapi::getActiveDocumentContext()$path)
+  setwd(script_dir)
+}
+
+#load main functions
 source("aneuQPCR_functions.R")
 
 #get amplification curves
@@ -10,7 +21,7 @@ amp_curves <- read_delim(amp_curves,  locale = locale(decimal_mark = ","))
 
 #set number of amplification cycles
 ncycles <- 40
-threshold <- 5
+threshold <- 4
 
 #format the table to convert it to a cycle X Well matrix
 rownames(amp_curves) <- amp_curves$Index #set the cycle number to the row name
