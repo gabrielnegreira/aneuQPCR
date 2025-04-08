@@ -63,6 +63,8 @@ fit_model_LL5 <- function(qPCRobj){
   well_meta$efficiency <- NA
   well_meta$extrapolated_start <- NA
   well_meta$inflection_point <- NA
+  well_meta$start_linear_part <- NA
+  well_meta$end_linear_part <- NA
   models <- list()
   for(i in c(1:ncol(df))){
     well <- colnames(df[,i, drop = FALSE])
@@ -116,6 +118,8 @@ fit_model_LL5 <- function(qPCRobj){
     well_meta[well,]$efficiency <- efficiency
     well_meta[well,]$extrapolated_start <- extrapolated_start
     well_meta[well,]$inflection_point <- as.numeric(inflection_point)
+    well_meta[well,]$start_linear_part <- as.numeric(start_cycle)
+    well_meta[well,]$end_linear_part <- as.numeric(end_cycle)
   }
   qPCRobj$metadata$well_meta <- well_meta
   qPCRobj$models$LL5 <- models
@@ -168,6 +172,7 @@ calc_Cts <- function(qPCRobj, threshold, model = "LL5"){
   #warn if a Ct value is bigger than the inflection point in the qPCR
   test <- well_meta %>%
     filter(!is.na(Ct_value)) %>%
+    filter(LL5_model_Rsquared > 0.99) %>%
     mutate(test = Ct_value > inflection_point) %>%
     pull("test") %>%
     sum()
@@ -280,33 +285,35 @@ plot_model <- function(model, scale = c("log2", "original")){
   linear_part <- model$linear_part
   lmodel <- model$lmodel
   
-  #now to extrapolate the linear model, we need to find the cycles where the linear model crosses both asymptopes
-  #this subfunction basically calculates the distance between the predicted fluorescence value in the linear `model` and the fluorecence in the asymptope (threshold)
-  objective_function <- function(cycle, threshold, model) {
-    return(abs(predict(model, newdata = data.frame(cycle = cycle)) - threshold)) 
+  if(!is.null(lmodel)){
+    #now to extrapolate the linear model, we need to find the cycles where the linear model crosses both asymptopes
+    #this subfunction basically calculates the distance between the predicted fluorescence value in the linear `model` and the fluorecence in the asymptope (threshold)
+    objective_function <- function(cycle, threshold, model) {
+      return(abs(predict(model, newdata = data.frame(cycle = cycle)) - threshold)) 
+    }
+    #find the cycle where the linear model croses the lower asymptope
+    min_cycle <- optimize(objective_function, 
+                          interval = model$data$cycle, 
+                          threshold = coefficients["lower_asymptope"], 
+                          model = lmodel)$minimum
+    #find the cycle where the linear model croses the upper asymptope
+    max_cycle <- optimize(objective_function, 
+                          interval = model$data$cycle, 
+                          threshold = coefficients["upper_asymptope"], 
+                          model = lmodel)$minimum
+    
+    #once we have the cycles, we can predict the values inside those cycles to display the extrapolated linear model 
+    extrapolated <- data.frame(cycle = c(min_cycle, max_cycle)) %>%
+      mutate(fluorescence = predict(lmodel, data.frame(cycle)))
   }
-  #find the cycle where the linear model croses the lower asymptope
-  min_cycle <- optimize(objective_function, 
-                        interval = model$data$cycle, 
-                        threshold = coefficients["lower_asymptope"], 
-                        model = lmodel)$minimum
-  #find the cycle where the linear model croses the upper asymptope
-  max_cycle <- optimize(objective_function, 
-                        interval = model$data$cycle, 
-                        threshold = coefficients["upper_asymptope"], 
-                        model = lmodel)$minimum
-  
-  #once we have the cycles, we can predict the values inside those cycles to display the extrapolated linear model 
-  extrapolated <- data.frame(cycle = c(min_cycle, max_cycle)) %>%
-    mutate(fluorescence = predict(lmodel, data.frame(cycle)))
   
   plot <- to_plot %>%
     ggplot(aes(x = cycle, y = fluorescence))+
     geom_line(aes(y = fitted(model)), linewidth = 0.5)+
-    {if(scale == "log2")geom_line(data = extrapolated, color = "blue", linewidth = 1, linetype = "dashed")}+
+    {if(scale == "log2" & !is.null(lmodel))geom_line(data = extrapolated, color = "blue", linewidth = 1, linetype = "dashed")}+
     geom_line(data = linear_part, color = "red", linewidth = 1)+
     geom_point()+
-    {if(scale == "original")geom_label_repel(data = extrapolated[which(extrapolated$cycle == min(extrapolated$cycle)),], aes(label = round(2^fluorescence, 3)), color = "blue", nudge_y = 2, angle = 90)}+
+    {if(scale == "original" & !is.null(lmodel))geom_label_repel(data = extrapolated[which(extrapolated$cycle == min(extrapolated$cycle)),], aes(label = round(2^fluorescence, 3)), color = "blue", nudge_y = 2, angle = 90)}+
     {if(scale == "original")scale_y_continuous(transform = scales::trans_new("reverse_log2", transform = function(x)2^x, inverse = function(x)log2(x)),)}+
     labs(subtitle = "red = linear amplification part; dashed blue = extrapolation of linear amplification, dashed green = inflection point")+
     geom_hline(yintercept = c(coefficients["lower_asymptope"], coefficients["upper_asymptope"]), color = "red", linetype = "dashed")+
