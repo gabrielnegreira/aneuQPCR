@@ -17,7 +17,7 @@ source("aneuQPCR_functions.R")
 #get amplification curves
 message("Select the amplification curves file.")
 amp_curves <- file.choose()
-amp_curves <- read_delim(amp_curves,  locale = locale(decimal_mark = ","))
+amp_curves <- as.data.frame(read_delim(amp_curves,  locale = locale(decimal_mark = ",")))
 
 #set number of amplification cycles
 ncycles <- 40
@@ -46,3 +46,4 @@ plot_amps(qPCRobj, threshold_line = threshold)
 
 #save the excel file
 xlsx::write.xlsx(qPCRobj$metadata$well_meta, file = "per_well_calculations.xlsx", row.names = FALSE)
+message(paste("results stored at", paste0(getwd(), "/per_well_calculations.xlsx")))
