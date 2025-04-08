@@ -30,8 +30,8 @@ To estimate PCR efficiency and infer initial target DNA concentrations, the foll
    A linear model is fitted to the data points within the identified linear region, before the inflection point. This portion of the curve reflects the most consistent and efficient phase of DNA amplification.
 
 5. **Efficiency and Initial Concentration Estimation**  
-   - The **efficiency** of the PCR is calculated as 2^slope of the fitted linear model.  
-   - The **initial amount of target DNA** (at cycle 0) is estimated as 2^intercept, representing the extrapolated fluorescence signal at the start of amplification.
+   - The **efficiency** of the PCR is calculated as 2^slope of the fitted linear model.
+   - The **initial amount of target DNA** is estimated as 2^intercept, representing the amount of target DNA (expressed in fluorescence) in the reaction at cycle 0.
 
 All these steps are carried out by the `fit_model_LL5()` function, which takes as input a `qPCRobj` object (see below).
 
