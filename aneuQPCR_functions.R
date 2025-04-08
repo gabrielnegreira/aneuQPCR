@@ -318,5 +318,3 @@ plot_model <- function(model, scale = c("log2", "original")){
     {if(scale == "log2")labs(y = "Log2(Fluorescence)")}
   return(plot)
 }
-
-
