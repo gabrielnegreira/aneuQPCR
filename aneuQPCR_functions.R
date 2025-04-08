@@ -5,7 +5,7 @@
 
 #libraries####
 # List of required packages
-required_packages <- c("readr", "readxl", "dplyr", "tidyr", "tibble",
+required_packages <- c("readr", "xlsx", "dplyr", "tidyr", "tibble",
   "drc", "scales", "ggrepel")
 
 # Check which packages are not installed
@@ -15,7 +15,7 @@ missing_packages <- required_packages[!(required_packages %in% installed.package
 if (length(missing_packages) > 0) {
   install.packages(missing_packages)
 } else {
-  message("✅ All required packages are already installed.")
+  message("All required packages are already installed.")
 }
 
 # Load all packages
