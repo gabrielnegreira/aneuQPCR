@@ -47,3 +47,10 @@ plot_amps(qPCRobj, threshold_line = threshold, scale = "log2")
 #save the excel file
 xlsx::write.xlsx(qPCRobj$metadata$well_meta, file = "per_well_calculations.xlsx", row.names = FALSE)
 message(paste("results stored at", paste0(getwd(), "/per_well_calculations.xlsx")))
+
+#plot example
+plot <-plot_model(qPCRobj$models$LL5$F1)+ggtitle("Log2 scale", subtitle = NULL)
+ggsave("figures/LL5_model_log2_scale.png", plot = plot, width = 6, height = 5)
+#plot example
+plot <-plot_model(qPCRobj$models$LL5$F1, scale = "original")+ggtitle("Original scale", subtitle = NULL)
+ggsave("figures/LL5_model_original_scale.png", plot = plot, width = 6, height = 5)
