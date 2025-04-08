@@ -4,14 +4,22 @@
 #3) simplify the scrip for other users to use it.
 
 #libraries####
-library(readr)
-library(readxl)
-library(dplyr)
-library(tidyr)
-library(tibble)
-library(drc)
-library(scales)
-library(ggrepel)
+# List of required packages
+required_packages <- c("readr", "readxl", "dplyr", "tidyr", "tibble",
+  "drc", "scales", "ggrepel")
+
+# Check which packages are not installed
+missing_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
+
+# Install missing packages
+if (length(missing_packages) > 0) {
+  install.packages(missing_packages)
+} else {
+  message("✅ All required packages are already installed.")
+}
+
+# Load all packages
+invisible(lapply(required_packages, library, character.only = TRUE))
 
 #create_qPCRobj
 create_qPCRobj <- function(amp_curves, well_meta, ncycles, melting_curve = FALSE){
@@ -20,10 +28,16 @@ create_qPCRobj <- function(amp_curves, well_meta, ncycles, melting_curve = FALSE
   #remove wells not present in the well meta
   nwells_before <- ncol(amp_curves)
   amp_curves <- amp_curves[,rownames(well_meta)]
-  message(paste("removed", nwells_before - ncol(amp_curves), "wells which were not present in well meta"))
+  removed_wells <- nwells_before - ncol(amp_curves) 
+  if(removed_wells > 0){
+    message(paste("removed", removed_wells, "wells which were not present in well meta"))  
+  }
+  
+  #ensure rownames represent cycles
+  rownames(amp_curves) <- c(1:nrow(amp_curves))
   
   if(melting_curve){
-    melting_curves <- amp_curves[ncycles+1:nrow(amp_curves),] #assumes melting curves are the subsequent "cycles" after the PCR is done.
+    melting_curves <- amp_curves[(ncycles+1):nrow(amp_curves),] #assumes melting curves are the subsequent "cycles" after the PCR is done.
     amp_curves <- amp_curves[c(1:ncycles),]
     raw_data <- list(amp_curves = amp_curves, melting_curves = melting_curves)
   }else{
@@ -52,7 +66,7 @@ fit_model_LL5 <- function(qPCRobj){
     to_model <- data.frame(cycle = as.numeric(rownames(df)), fluorescence = as.numeric(df[,i]))
     #log2 transformation makes it easier to find the linear phase
     to_model$fluorescence <- log2(to_model$fluorescence)
-    model <- try(drm(fluorescence ~ cycle, data = to_model, fct = LL.5()))
+    model <- try(drm(fluorescence ~ cycle, data = to_model, fct = LL.5()), silent = TRUE)
     
     #if model fails, mark it (usually happens with negative samples)
     if(class(model) == "try-error"){
@@ -215,7 +229,7 @@ calc_copy_number <- function(qPCRobj, ref_target = "chr36", ref_target_copy = 2,
 
 #plot_amps####
 #this function simply plots the amplification curves
-plot_amps <- function(qPCRobj, threshold_line = NULL, group_by = "target", split_by = "sample"){
+plot_amps <- function(qPCRobj, threshold_line = NULL, group_by = NULL, split_by = NULL){
   library(dplyr)
   library(ggplot2)
   
@@ -223,18 +237,26 @@ plot_amps <- function(qPCRobj, threshold_line = NULL, group_by = "target", split
   raw_data <- qPCRobj$data$amp_curves
   
   
- plot <- raw_data %>%
+  
+ to_plot <- raw_data %>%
     t() %>%
     as.data.frame() %>%
     rownames_to_column("well") %>%
     cbind(wells_info[colnames(raw_data),-which(tolower(colnames(wells_info)) == "well")]) %>%
     pivot_longer(cols = any_of(rownames(raw_data)), names_to = "cycle", values_to = "fluorescence") %>%
-    mutate(cycle = as.integer(cycle), fluorescence = as.numeric(fluorescence)) %>%
+    mutate(cycle = as.integer(cycle), fluorescence = as.numeric(fluorescence))
+ 
+ if(is.null(group_by)){
+   group_by <- "well"
+ }
+ 
+ plot <- to_plot %>%
     ggplot(aes(x = cycle, y = fluorescence, color = .data[[group_by]], group = well))+
     geom_line()+
    {if(is.numeric(threshold_line))geom_hline(yintercept=threshold_line, linetype = "dashed")}+
-   facet_wrap(vars(.data[[split_by]]))
- 
+   {if(group_by == "well")guides(color = "none")}+
+   {if(!is.null(split_by))facet_wrap(vars(.data[[split_by]]))}
+
  return(plot)
 }
 
