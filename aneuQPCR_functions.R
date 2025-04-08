@@ -311,7 +311,7 @@ plot_model <- function(model, scale = c("log2", "original")){
     {if(!is.null(lmodel))geom_line(data = extrapolated, color = "blue", linewidth = 1, linetype = "dashed")}+
     geom_line(data = linear_part, color = "red", linewidth = 1)+
     geom_point()+
-    {if(!is.null(lmodel))geom_label_repel(data = extrapolated[which(extrapolated$cycle == min(extrapolated$cycle)),], aes(label = label), color = "blue", nudge_y = 2, angle = 90)}+
+    {if(!is.null(lmodel))geom_label_repel(data = extrapolated[which(extrapolated$cycle == min(extrapolated$cycle)),], aes(label = label), color = "blue", nudge_y = diff(range(to_plot$fluorescence))*0.3, angle = 90)}+
     labs(subtitle = "red = linear amplification part; dashed blue = extrapolation of linear amplification, dashed green = inflection point")+
     geom_hline(yintercept = c(coefficients["lower_asymptope"], coefficients["upper_asymptope"]), color = "red", linetype = "dashed")+
     geom_vline(xintercept = c(coefficients["inflection_point"]), color = "green", linetype = "dashed")+
