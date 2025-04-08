@@ -21,7 +21,7 @@ amp_curves <- as.data.frame(read_delim(amp_curves,  locale = locale(decimal_mark
 
 #set number of amplification cycles
 ncycles <- 40
-threshold <- 4
+threshold <- 2
 
 #format the table to convert it to a cycle X Well matrix
 rownames(amp_curves) <- amp_curves$Index #set the cycle number to the row name

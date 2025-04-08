@@ -161,7 +161,7 @@ calc_Cts <- function(qPCRobj, threshold, model = "LL5"){
   }
   
   #warn if it is not possible to calculate Ct value for any well
-  if(sum(!is.na(well_meta$Ct_value)) != 0){
+  if(sum(!is.na(well_meta$Ct_value)) == 0){
     warning("Could not determine the Ct value for any well. Is the threhold too high?")
   }
   
