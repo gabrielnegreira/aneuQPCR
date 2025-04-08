@@ -6,7 +6,7 @@
 #libraries####
 # List of required packages
 required_packages <- c("readr", "xlsx", "dplyr", "tidyr", "tibble",
-  "drc", "scales", "ggrepel")
+                       "drc", "scales", "ggrepel")
 
 # Check which packages are not installed
 missing_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
@@ -147,17 +147,22 @@ calc_Cts <- function(qPCRobj, threshold, model = "LL5"){
       Ct_value <- NA
     }else{
       #if the maximum value in the model doens't reach the threshold, also return NA
-      if(suppressWarnings(max(predict(model_to_use), na.rm = TRUE)) < threshold){
+      if(suppressWarnings(max(predict(model_to_use), na.rm = TRUE)) < log2(threshold)){
         Ct_value <- NA
       }else{
         cycle_range <- model_to_use$data$cycle
         Ct_value <- suppressWarnings(optimize(objective_function, 
-                             interval = cycle_range, 
-                             threshold = threshold, 
-                             model = model_to_use)$minimum)
+                                              interval = cycle_range, 
+                                              threshold = threshold, 
+                                              model = model_to_use)$minimum)
       }
     }
-      well_meta[well,]$Ct_value <- Ct_value
+    well_meta[well,]$Ct_value <- Ct_value
+  }
+  
+  #warn if it is not possible to calculate Ct value for any well
+  if(sum(!is.na(well_meta$Ct_value)) != 0){
+    warning("Could not determine the Ct value for any well. Is the threhold too high?")
   }
   
   #warn if a Ct value is bigger than the inflection point in the qPCR
@@ -241,26 +246,26 @@ plot_amps <- function(qPCRobj, threshold_line = NULL, group_by = NULL, split_by 
   
   
   
- to_plot <- raw_data %>%
+  to_plot <- raw_data %>%
     t() %>%
     as.data.frame() %>%
     rownames_to_column("well") %>%
     cbind(wells_info[colnames(raw_data),-which(tolower(colnames(wells_info)) == "well")]) %>%
     pivot_longer(cols = any_of(rownames(raw_data)), names_to = "cycle", values_to = "fluorescence") %>%
     mutate(cycle = as.integer(cycle), fluorescence = as.numeric(fluorescence))
- 
- if(is.null(group_by)){
-   group_by <- "well"
- }
- 
- plot <- to_plot %>%
+  
+  if(is.null(group_by)){
+    group_by <- "well"
+  }
+  
+  plot <- to_plot %>%
     ggplot(aes(x = cycle, y = fluorescence, color = .data[[group_by]], group = well))+
     geom_line()+
-   {if(is.numeric(threshold_line))geom_hline(yintercept=threshold_line, linetype = "dashed")}+
-   {if(group_by == "well")guides(color = "none")}+
-   {if(!is.null(split_by))facet_wrap(vars(.data[[split_by]]))}
-
- return(plot)
+    {if(is.numeric(threshold_line))geom_hline(yintercept=threshold_line, linetype = "dashed")}+
+    {if(group_by == "well")guides(color = "none")}+
+    {if(!is.null(split_by))facet_wrap(vars(.data[[split_by]]))}
+  
+  return(plot)
 }
 
 plot_model <- function(model, scale = c("log2", "original")){
@@ -283,9 +288,9 @@ plot_model <- function(model, scale = c("log2", "original")){
   }
   #find the cycle where the linear model croses the lower asymptope
   min_cycle <- optimize(objective_function, 
-                              interval = model$data$cycle, 
-                              threshold = coefficients["lower_asymptope"], 
-                              model = lmodel)$minimum
+                        interval = model$data$cycle, 
+                        threshold = coefficients["lower_asymptope"], 
+                        model = lmodel)$minimum
   #find the cycle where the linear model croses the upper asymptope
   max_cycle <- optimize(objective_function, 
                         interval = model$data$cycle, 
@@ -295,9 +300,9 @@ plot_model <- function(model, scale = c("log2", "original")){
   #once we have the cycles, we can predict the values inside those cycles to display the extrapolated linear model 
   extrapolated <- data.frame(cycle = c(min_cycle, max_cycle)) %>%
     mutate(fluorescence = predict(lmodel, data.frame(cycle)))
- 
+  
   plot <- to_plot %>%
-  ggplot(aes(x = cycle, y = fluorescence))+
+    ggplot(aes(x = cycle, y = fluorescence))+
     geom_line(aes(y = fitted(model)), linewidth = 0.5)+
     {if(scale == "log2")geom_line(data = extrapolated, color = "blue", linewidth = 1, linetype = "dashed")}+
     geom_line(data = linear_part, color = "red", linewidth = 1)+
