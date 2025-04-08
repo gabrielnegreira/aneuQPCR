@@ -137,8 +137,8 @@ calc_Cts <- function(qPCRobj, threshold, model = "LL5"){
     stop(paste("Could not find model named", model, "in the qPCR object provided"))
   }
   
-  well_info <- qPCRobj$metadata$well_meta
-  well_info$Ct_value <- NA
+  well_meta <- qPCRobj$metadata$well_meta
+  well_meta$Ct_value <- NA
   
   for(well in names(qPCRobj$models[[model]])){
     model_to_use <- qPCRobj$models[[model]][[well]]
@@ -147,21 +147,21 @@ calc_Cts <- function(qPCRobj, threshold, model = "LL5"){
       Ct_value <- NA
     }else{
       #if the maximum value in the model doens't reach the threshold, also return NA
-      if(max(predict(model_to_use), na.rm = TRUE) < threshold){
+      if(suppressWarnings(max(predict(model_to_use), na.rm = TRUE)) < threshold){
         Ct_value <- NA
       }else{
         cycle_range <- model_to_use$data$cycle
-        Ct_value <- optimize(objective_function, 
+        Ct_value <- suppressWarnings(optimize(objective_function, 
                              interval = cycle_range, 
                              threshold = threshold, 
-                             model = model_to_use)$minimum
+                             model = model_to_use)$minimum)
       }
     }
-      well_info[well,]$Ct_value <- Ct_value
+      well_meta[well,]$Ct_value <- Ct_value
   }
   
   #warn if a Ct value is bigger than the inflection point in the qPCR
-  test <- well_info %>%
+  test <- well_meta %>%
     filter(!is.na(Ct_value)) %>%
     mutate(test = Ct_value > inflection_point) %>%
     pull("test") %>%
@@ -171,7 +171,7 @@ calc_Cts <- function(qPCRobj, threshold, model = "LL5"){
     warning("Some Ct values are higher then their respective inflection points. Consider lowering the threshold.")
   }
   
-  qPCRobj$metadata$well_meta <- well_info
+  qPCRobj$metadata$well_meta <- well_meta
   return(qPCRobj)
 }
 
@@ -189,9 +189,9 @@ calc_copy_number <- function(qPCRobj, ref_target = "chr36", ref_target_copy = 2,
     qPCRobj <- calc_Cts(qPCRobj)
   }
   
-  well_info <- qPCRobj$metadata$well_meta
+  well_meta <- qPCRobj$metadata$well_meta
   
-  sample_meta <- well_info %>%
+  sample_meta <- well_meta %>%
     group_by(rep_of) %>%
     filter(!is.na(rep_of))%>%
     mutate(out = Ct_value - median(Ct_value, na.rm = TRUE),

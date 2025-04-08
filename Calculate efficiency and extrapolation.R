@@ -36,7 +36,7 @@ well_meta <- data.frame(well = colnames(amp_curves))
 qPCRobj <- create_qPCRobj(amp_curves, well_meta, ncycles, melting_curve = TRUE)
 
 #calculate efficiency and extrapolation of initial fluorescence with LL5 modeling. 
-qPCRobj <- fit_model_LL5(qPCRobj)
+qPCRobj <- suppressWarnings(fit_model_LL5(qPCRobj))
 
 #calculate Ct value with simple threshold line
 qPCRobj <- calc_Cts(qPCRobj, threshold = threshold)
