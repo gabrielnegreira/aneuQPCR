@@ -25,6 +25,9 @@ invisible(lapply(required_packages, library, character.only = TRUE))
 create_qPCRobj <- function(amp_curves, well_meta, ncycles, melting_curve = FALSE){
   #format well_meta
   rownames(well_meta) <- well_meta$well
+  
+  #format the amp_curves
+  amp_curves <- as.matrix(amp_curves)
   #remove wells not present in the well meta
   nwells_before <- ncol(amp_curves)
   amp_curves <- amp_curves[,rownames(well_meta)]
