@@ -172,13 +172,13 @@ calc_Cts <- function(qPCRobj, threshold, model = "LL5"){
   #warn if a Ct value is bigger than the inflection point in the qPCR
   test <- well_meta %>%
     filter(!is.na(Ct_value)) %>%
-    filter(LL5_model_Rsquared > 0.99) %>%
-    mutate(test = Ct_value > inflection_point) %>%
-    pull("test") %>%
-    sum()
+    filter(LL5_model_Rsquared > 0.99)
   
-  if(test > 0){
-    warning("Some Ct values are higher then their respective inflection points. Consider lowering the threshold.")
+  if(sum(test$Ct_value > test$inflection_point) > 0){
+    warning("Some Ct values are higher than their respective inflection points. Consider lowering the threshold.")
+  }
+  if(sum(test$Ct_value < test$start_linear_part) > 0){
+    warning("Some Ct values are lower than the beggining of the linear amplification phase. Consider increasing the threshold.")
   }
   
   qPCRobj$metadata$well_meta <- well_meta
