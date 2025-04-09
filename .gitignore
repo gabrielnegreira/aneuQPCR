@@ -8,3 +8,4 @@ Example.R
 *.pdf
 *.xlsx
 inputs
+plot_example.R
