@@ -6,7 +6,8 @@ aneuQPCR is a collection of R functions developed for personal use to support th
 - Infer the initial amount of a target DNA template in each reaction without relying on Ct values and taking amplification efficiency into account. 
 
 Here is a graphical representation of how it works:
-![workflow animation](figures/animation.gif)
+
+<img src="figures/animation.gif" alt="LL5 model workflow" width="500"/>
 
 # Usage
 The estimation of PCR amplification efficiency and extrapolation of initial target DNA amounts are done by with the `fit_model_LL5()` function. This function expects a `qPCRobj` object, which can be created with `create_qPCRobj()`. As input, you only need a matrix where columns are PCR reactions (wells in a PCR plate), rows are the cycle number, and values are the fluorescence signal captured in each cycle. 
@@ -51,6 +52,7 @@ You can visualize how the threshold is placed with `plot_amps()`
 plot_amps(qPCRobj, threshold_line = 1, scale = "log2")
 ```
 ![threshold placement example](figures/amps_example.png)
+
 Currently `calc_Cts` requires setting `threshold` manually. Automatic threshold detection is to be implemented in the future.
 
 All the calculations are stored in qPCRobj$metadata$well_meta
