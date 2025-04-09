@@ -73,5 +73,15 @@ C10  C10          0.9999014               0.9995638   1.469715       0.000376832
 C11  C11          0.9998829               0.9994462   1.468247       0.0003513653       25.4448093                22              28 19.788840
 C12  C12          0.9999191               0.9993152   1.471679       0.0003239109       25.4002639                22              28 20.041160
 ```
-You can the easily export this dataframe to an excel file with `xlsx`
+You can the easily export this dataframe to an excel file with the `xlsx` package
+```r
 xlsx::write.xlsx(qPCRobj$metadata$well_meta, file = "example_output.xlsx", row.names = FALSE)
+```
+
+# Acknowledgements
+The method for determination of amplification efficiency and inference of initial amount of target DNA is based on approach described in:
+Fu Y, Lin L, Liu C, Wang J. Assumption-free analysis for amplification-based quantitative nucleic acid detection. J Chem Phys. 2024 Mar 14;160(10):104111. doi: 10.1063/5.0191132. PMID: 38482869.
+
+**Packages:**
+- [drc](https://cran.r-project.org/web/packages/drc/) for the LL5 modeling
+- [tidyverse](https://www.tidyverse.org/) for general coding and plots.
