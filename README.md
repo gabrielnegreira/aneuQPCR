@@ -16,7 +16,7 @@ The estimation of PCR amplification efficiency and extrapolation of initial targ
 
 ## 1) Clone the repo and run:
 ```r
-source(aneuQPCR_functions.R)
+source("aneuQPCR_functions.R")
 ```
 This will load the functions into your R environment. 
 
@@ -41,7 +41,7 @@ qPCRobj <- create_qPCRobj(amp_curves = example)
 ```
 If your matrix also contains the values for a melting curve at the end of the PCR program, you can trim the melting curve part by seting `melting_curve` to true and specifying the cycle number where the PCR ends with `ncycles`. 
 ```r
-qPCRobj <- create_qPCRobj(amp_curves = example, melting_cruve = TRUE, ncycles = 40)
+qPCRobj <- create_qPCRobj(amp_curves = example, melting_curve = TRUE, ncycles = 40)
 ```
 
 ## 4) Calculate efficiency and infer initial target DNA amount.
