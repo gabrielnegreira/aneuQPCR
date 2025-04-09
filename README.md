@@ -1,5 +1,5 @@
 # aneuQPCR
-aneuQPCR is a collection of R functions developed for personal use to support the quantification of bulk aneuploidies using qPCR data. Although not structured as a formal R package, this repository can be helpful for anyone who needs to:
+aneuQPCR is a collection of R functions developed for the quantification of bulk aneuploidies using qPCR data. This project can be helpful for anyone who needs to:
 
 - Estimate PCR amplification efficiency on a per-reaction basis and without the need for standard curves.
 
@@ -12,7 +12,8 @@ Here is a graphical representation of how it works:
 <img src="figures/animation.gif" alt="LL5 model workflow" width="500"/>
 
 # Usage
-The estimation of PCR amplification efficiency and extrapolation of initial target DNA amounts are done by with the `fit_model_LL5()` function. This function expects a `qPCRobj` object, which can be created with `create_qPCRobj()`. As input, you only need a matrix where columns are PCR reactions (wells in a PCR plate), rows are the cycle number, and values are the fluorescence signal captured in each cycle. 
+The estimation of PCR amplification efficiency and extrapolation of initial target DNA amounts are done by with the `fit_model_LL5()` function. This function expects a `qPCRobj` object, which can be created with `create_qPCRobj()`. As input, you only need a matrix where columns are PCR reactions (wells in a PCR plate), rows are the cycle number, and values are the fluorescence signal captured in each cycle. An example input file is provided as `example.tsv`. 
+
 ```r
 example <- read.table("example.tsv", sep = "\t", header = TRUE)
 head(example[,1:10])
@@ -77,7 +78,7 @@ C10  C10          0.9999014               0.9995638   1.469715       0.000376832
 C11  C11          0.9998829               0.9994462   1.468247       0.0003513653       25.4448093                22              28 19.788840
 C12  C12          0.9999191               0.9993152   1.471679       0.0003239109       25.4002639                22              28 20.041160
 ```
-You can the easily export this dataframe to an excel file with the `xlsx` package
+You can then easily export this dataframe to an excel file with the `xlsx` package
 ```r
 xlsx::write.xlsx(qPCRobj$metadata$well_meta, file = "example_output.xlsx", row.names = FALSE)
 ```
