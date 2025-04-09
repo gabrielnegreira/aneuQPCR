@@ -151,6 +151,8 @@ calc_Cts <- function(qPCRobj, threshold, model = "LL5"){
   #this function simply return the predicted values minus the threshold. This is used in the optimize function to find
   #the cycle that minimizes the distance between the fitted values and the threshold.
   
+  threshold <- log2(threshold)
+  
   objective_function <- function(cycle, threshold, model) {
     return(abs(predict(model, newdata = data.frame(cycle = cycle)) - threshold))
   }
