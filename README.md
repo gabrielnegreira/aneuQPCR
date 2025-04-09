@@ -82,8 +82,17 @@ xlsx::write.xlsx(qPCRobj$metadata$well_meta, file = "example_output.xlsx", row.n
 
 # Acknowledgements
 The method for determination of amplification efficiency and inference of initial amount of target DNA is based on approach described in:
-Fu Y, Lin L, Liu C, Wang J. Assumption-free analysis for amplification-based quantitative nucleic acid detection. J Chem Phys. 2024 Mar 14;160(10):104111. doi: 10.1063/5.0191132. PMID: 38482869.
+Fu Y, Lin L, Liu C, Wang J. Assumption-free analysis for amplification-based quantitative nucleic acid detection. J Chem Phys. 2024 Mar 14;160(10):104111. doi: [10.1063/5.0191132](https://pubs.aip.org/aip/jcp/article-abstract/160/10/104111/3271366/Assumption-free-analysis-for-amplification-based?redirectedFrom=fulltext). PMID: 38482869.
 
 **Packages:**
 - [drc](https://cran.r-project.org/web/packages/drc/) for the LL5 modeling
 - [tidyverse](https://www.tidyverse.org/) for general coding and plots.
+
+# 📬 Contact & Contributions
+
+If you have questions, suggestions, or want to contribute, feel free to:
+
+- 🐛 Open an [issue](https://github.com/gabrielnegreira/aneuQPCR/issues)  
+- 🔧 Submit a pull request  
+- 🧑‍💻 Contact me via [GitHub](https://github.com/gabrielnegreira)  
+- 📧 Email me at: **gnegreira_github@proton.me**
