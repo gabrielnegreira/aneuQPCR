@@ -5,6 +5,8 @@ aneuQPCR is a collection of R functions developed for personal use to support th
 
 - Infer the initial amount of a target DNA template in each reaction without relying on Ct values and taking amplification efficiency into account. 
 
+Although originally developed with aneuploidy detection in mind, the functions are applicable to any qPCR dataset. They can also be useful in other contexts where precise quantification matters, such as gene expression analysis, copy number variation studies, and general molecular diagnostics.
+
 Here is a graphical representation of how it works:
 
 <img src="figures/animation.gif" alt="LL5 model workflow" width="500"/>
@@ -82,7 +84,15 @@ xlsx::write.xlsx(qPCRobj$metadata$well_meta, file = "example_output.xlsx", row.n
 
 # Acknowledgements
 The method for determination of amplification efficiency and inference of initial amount of target DNA is based on approach described in:
-Fu Y, Lin L, Liu C, Wang J. Assumption-free analysis for amplification-based quantitative nucleic acid detection. J Chem Phys. 2024 Mar 14;160(10):104111. doi: [10.1063/5.0191132](https://pubs.aip.org/aip/jcp/article-abstract/160/10/104111/3271366/Assumption-free-analysis-for-amplification-based?redirectedFrom=fulltext). PMID: 38482869.
+
+- Christian Ramakers, Jan M Ruijter, Ronald H.Lekanne Deprez, Antoon F.M Moorman,
+*Assumption-free analysis of quantitative real-time polymerase chain reaction (PCR) data*,
+Neuroscience Letters,
+Volume 339, Issue 1,
+2003,
+Pages 62-66,
+ISSN 0304-3940,
+[https://doi.org/10.1016/S0304-3940(02)01423-4](https://www.sciencedirect.com/science/article/pii/S0304394002014234)
 
 **Packages:**
 - [drc](https://cran.r-project.org/web/packages/drc/) for the LL5 modeling
