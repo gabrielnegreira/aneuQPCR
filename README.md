@@ -20,11 +20,11 @@ Here is a graphical representation of how it works:
 ```sh
 git clone git@github.com:gabrielnegreira/aneuQPCR.git
 ```
-5) In R, set working directory to the location of the extracted folder:
+4) In R, set working directory to the location of the extracted folder:
 ```r
 setwd("path/to/aneuQPCR")
 ```
-4) Source the aneuQPCR functions
+5) Source the aneuQPCR functions
  ```r
 source("aneuQPCR_functions.R")
 ```
