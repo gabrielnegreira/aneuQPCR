@@ -22,12 +22,28 @@ if (length(missing_packages) > 0) {
 invisible(lapply(required_packages, library, character.only = TRUE))
 
 #create_qPCRobj
-create_qPCRobj <- function(amp_curves, well_meta, ncycles, melting_curve = FALSE){
+create_qPCRobj <- function(amp_curves, well_meta = NULL, ncycles = NULL, melting_curve = FALSE){
   #format well_meta
+  if(is.null(well_meta)){
+    well_meta <- data.frame(well = colnames(amp_curves))
+  }
   rownames(well_meta) <- well_meta$well
+  
+  #require ncycles if melting_curve is TRUE
+  if(melting_curve & is.null(ncycles)){
+    stop("`ncycles` is required if `melting_curve` is TRUE")
+  }
+  
+  if(is.null(ncycles)){
+    ncycles <- nrow(amp_curves)
+  }
   
   #format the amp_curves
   amp_curves <- as.matrix(amp_curves)
+  if(is.null(rownames(amp_curves))){
+    rownames(amp_curves) <- c(1:nrow(amp_curves))
+  }
+  
   #remove wells not present in the well meta
   nwells_before <- ncol(amp_curves)
   amp_curves <- amp_curves[,rownames(well_meta)]
