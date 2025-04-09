@@ -48,7 +48,7 @@ qPCRobj <- calc_Cts(qPCRobj, threshold = 1)
 ```
 You can visualize how the threshold is placed with `plot_amps()` 
 ```r
-plot_amps(qPCRobj, threshold_line = 1)
+plot_amps(qPCRobj, threshold_line = 1, scale = "log2")
 ```
 ![threshold placement example](figures/amps_example.png)
 Currently `calc_Cts` requires setting `threshold` manually. Automatic threshold detection is to be implemented in the future.
