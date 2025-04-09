@@ -9,7 +9,9 @@ Although originally developed with aneuploidy detection in mind, the functions a
 
 Here is a graphical representation of how it works:
 
-<img src="figures/animation.gif" alt="LL5 model workflow" width="500"/>
+<p align="center">
+  <img src="figures/animation.gif" alt="LL5 model workflow" height="300"/>
+</p>
 
 # Usage
 The estimation of PCR amplification efficiency and extrapolation of initial target DNA amounts are done by with the `fit_model_LL5()` function. This function expects a `qPCRobj` object, which can be created with `create_qPCRobj()`. As input, you only need a matrix where columns are PCR reactions (wells in a PCR plate), rows are the cycle number, and values are the fluorescence signal captured in each cycle. An example input file is provided as `example.tsv`. 
@@ -56,7 +58,9 @@ p1 <- plot_model(qPCRobj$models$LL5$F1)
 p2 <- plot_model(qPCRobj$models$LL5$F1, scale = "original")
 cowplot::plot_grid(p1, p2, nrow = 1)
 ```
-![LL5 model example](figures/model_example.png)
+<p align="center">
+  <img src="figures/model_example.png" alt="Example of the LL5 model in both Log2 and original scales" height="300"/>
+</p>
 
 ## 5) (Optional) Calculate Ct values.
 
@@ -68,7 +72,9 @@ You can visualize how the threshold is placed with `plot_amps()`
 ```r
 plot_amps(qPCRobj, threshold_line = 1, scale = "log2")
 ```
-![threshold placement example](figures/amps_example.png)
+<p align="center">
+  <img src="figures/amps_example.png" alt="Example of threshold placing" height="300"/>
+</p>
 
 Currently `calc_Cts` requires setting `threshold` manually. Automatic threshold detection is to be implemented in the future.
 
