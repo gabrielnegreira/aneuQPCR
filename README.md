@@ -14,6 +14,14 @@ Here is a graphical representation of how it works:
 # Usage
 The estimation of PCR amplification efficiency and extrapolation of initial target DNA amounts are done by with the `fit_model_LL5()` function. This function expects a `qPCRobj` object, which can be created with `create_qPCRobj()`. As input, you only need a matrix where columns are PCR reactions (wells in a PCR plate), rows are the cycle number, and values are the fluorescence signal captured in each cycle. An example input file is provided as `example.tsv`. 
 
+## 1) Clone the repo and run:
+```r
+source(aneuQPCR_functions.R)
+```
+This will load the functions into your R environment. 
+
+
+## 2) Import the matrix with the amplification curves.
 ```r
 example <- read.table("example.tsv", sep = "\t", header = TRUE)
 head(example[,1:10])
@@ -27,6 +35,7 @@ head(example[,1:10])
 5 0.5202318 0.6220468 0.5627346 0.5196232 0.6139513 0.5550355 0.5140751 0.6263371 0.5888877 0.5628172
 6 0.5247166 0.6263367 0.5710101 0.5236513 0.6258342 0.5629084 0.5061662 0.6423971 0.5930059 0.5585534
 ```
+## 3) create the qPCR object.
 ```r
 qPCRobj <- create_qPCRobj(amp_curves = example)
 ```
@@ -34,6 +43,9 @@ If your matrix also contains the values for a melting curve at the end of the PC
 ```r
 qPCRobj <- create_qPCRobj(amp_curves = example, melting_cruve = TRUE, ncycles = 40)
 ```
+
+## 4) Calculate efficiency and infer initial target DNA amount.
+   
 Once created, you can use `fit_model_LL5()` to fit the LL5 model and calculate the PCR efficiency and initial target DNA amount in each PCR reaction:
 ```r
 qPCRobj <- fit_model_LL5(qPCRobj)
@@ -45,6 +57,8 @@ p2 <- plot_model(qPCRobj$models$LL5$F1, scale = "original")
 cowplot::plot_grid(p1, p2, nrow = 1)
 ```
 ![LL5 model example](figures/model_example.png)
+
+## 5) (Optional) Calculate Ct values.
 
 To calculate Ct values, you can use the `calc_Cts()` function.
 ```r
@@ -58,6 +72,7 @@ plot_amps(qPCRobj, threshold_line = 1, scale = "log2")
 
 Currently `calc_Cts` requires setting `threshold` manually. Automatic threshold detection is to be implemented in the future.
 
+## 6) Export results.
 All the calculations are stored in qPCRobj$metadata$well_meta
 ```r
 qPCRobj$metadata$well_meta[24:36,]
