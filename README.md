@@ -3,9 +3,9 @@
 
 aneuQPCR is a collection of R functions developed for the quantification of bulk aneuploidies using qPCR data. This project can be helpful for anyone who needs to:
 
-- Estimate PCR amplification efficiency on a per-reaction basis and without the need for standard curves.
+- Determine PCR amplification efficiency on a per-reaction basis and without the need for standard curves.
 
-- Infer the initial amount of a target DNA template in each reaction without relying on Ct values and taking amplification efficiency into account. 
+- Estimate target DNA quantification in each reaction without relying on Ct values and taking amplification efficiency into account. 
 
 Although originally developed with aneuploidy detection in mind, the functions are applicable to any qPCR dataset. They can also be useful in other contexts where precise quantification matters, such as gene expression analysis, copy number variation studies, and general molecular diagnostics.
 
