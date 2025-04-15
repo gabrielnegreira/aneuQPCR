@@ -31,7 +31,7 @@ setwd("path/to/aneuQPCR")
 source("aneuQPCR_functions.R")
 ```
 # Usage
-The estimation of PCR amplification efficiency and extrapolation of initial target DNA amounts are done with the `fit_model_LL5()` function. This function expects a `qPCRobj` object, which can be created with `create_qPCRobj()`. As input, you only need a matrix where columns are PCR reactions (wells in a PCR plate), rows are the cycle number, and values are the fluorescence signal captured in each cycle. An example input file is provided as `example.tsv`. 
+The estimation of PCR amplification efficiency and extrapolation of initial DNA amounts are done with the `fit_model_LL5()` function. This function expects a `qPCRobj` object, which can be created with `create_qPCRobj()`. As input, you only need a matrix where columns are PCR reactions (wells in a PCR plate), rows are the cycle number, and values are the fluorescence signal captured in each cycle. An example input file is provided as `example.tsv`. 
 
 ### 1) Import the matrix with the amplification curves.
 ```r
