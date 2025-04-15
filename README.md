@@ -5,7 +5,7 @@ aneuQPCR is a collection of R functions developed for the quantification of bulk
 
 - Determine PCR amplification efficiency on a per-reaction basis and without the need for standard curves.
 
-- Estimate target DNA quantification in each reaction without relying on Ct values and taking amplification efficiency into account. 
+- Estimate original DNA quantification in each reaction without relying on Ct values and taking amplification efficiency into account. 
 
 Although originally developed with aneuploidy detection in mind, the functions are applicable to any qPCR dataset. They can also be useful in other contexts where precise quantification matters, such as gene expression analysis, copy number variation studies, and general molecular diagnostics.
 
@@ -56,9 +56,9 @@ If your matrix also contains the values for a melting curve at the end of the PC
 qPCRobj <- create_qPCRobj(amp_curves = example, melting_curve = TRUE, ncycles = 40)
 ```
 
-### 3) Calculate efficiency and infer initial target DNA amount.
+### 3) Calculate efficiency and infer initial DNA amount.
    
-Once created, you can use `fit_model_LL5()` to fit the LL5 model and calculate the PCR efficiency and initial target DNA amount in each PCR reaction:
+Once created, you can use `fit_model_LL5()` to fit the LL5 model and calculate the PCR efficiency and initial DNA amount in each PCR reaction:
 ```r
 qPCRobj <- fit_model_LL5(qPCRobj)
 ```
