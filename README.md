@@ -125,7 +125,7 @@ Where:
   - $CN_T$ is the **copy number** of the **target** sample.
   - $Start_T$ is the extrapolated **start** amount of the **target** sample.
   - $Start_R$ is the extrapolated **start** amount of the **reference** sample.
-  - $CN_R$ is the **copy number** of the **reference** sample.
+  - $CN_R$ is the **copy number** of the **reference** sample (if unknown, set it to 1).
 
 2nd option: Using Ct values with efficiency compensation:
 
@@ -137,7 +137,7 @@ Where:
   - $Ct_R$ is the **Ct** value of the **reference** sample.
   - $Ef_T$ is the **efficiency** of the **target** sample.
   - $Ct_T$ is the **Ct** value of the **target** sample.
-  - $CN_R$ is the **copy number** of the **reference** sample.
+  - $CN_R$ is the **copy number** of the **reference** sample (if unknown, set it to 1).
 
 Both approaches should yield similar results. Note that option 1 does not require the determination of Ct values. 
 
