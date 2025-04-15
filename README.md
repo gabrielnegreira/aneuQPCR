@@ -114,6 +114,24 @@ You can then easily export this dataframe to an excel file with the `xlsx` packa
 xlsx::write.xlsx(qPCRobj$metadata$well_meta, file = "example_output.xlsx", row.names = FALSE)
 ```
 
+# Calculating relative quantities
+To estimate relative quantification between a target and a reference sample, we can use two approaches:
+
+1st Option: Using extrapolated amounts:
+
+$$CN_T = \left(\frac{Start_T}{Start_R}\right) \times CN_R$$
+
+Where:
+  - $CN_T$ is the **copy number** of the **target** sample.
+  - $Start_T$ is the extrapolated **start** amount of the **target** sample.
+  - $Start_R$ is the extrapolated **start** amount of the **reference** sample.
+  - $CN_R$ is the **copy number** of the **reference** sample.
+
+2nd option: Using Ct values with efficiency compensation:
+
+$$N_T = \left(\frac{E_R^{C_R}}{E_T^{C_T}}\right) \times N_R$$
+
+
 # Acknowledgements
 The method for determination of amplification efficiency and inference of initial amount of target DNA is based on approach described in:
 
