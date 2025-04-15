@@ -129,8 +129,17 @@ Where:
 
 2nd option: Using Ct values with efficiency compensation:
 
-$$N_T = \left(\frac{E_R^{C_R}}{E_T^{C_T}}\right) \times N_R$$
+$$CN_T = \left(\frac{Ef_R^{Ct_R}}{Ef_T^{Ct_T}}\right) \times CN_R$$
 
+Where:
+  - $CN_T$ is the **copy number** of the **target** sample.
+  - $Ef_R$ is the **efficiency** of the **reference** sample.
+  - $Ct_R$ is the **Ct** value of the **reference** sample.
+  - $Ef_T$ is the **efficiency** of the **target** sample.
+  - $Ct_T$ is the **Ct** value of the **target** sample.
+  - $CN_R$ is the **copy number** of the **reference** sample.
+
+Both approaches should yield similar results. Note that option 1 does not require the determination of Ct values. 
 
 # Acknowledgements
 The method for determination of amplification efficiency and inference of initial amount of target DNA is based on approach described in:
