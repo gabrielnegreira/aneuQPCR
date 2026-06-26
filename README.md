@@ -157,11 +157,11 @@ ISSN 0304-3940,
 - [drc](https://cran.r-project.org/web/packages/drc/) for the LL5 modeling
 - [tidyverse](https://www.tidyverse.org/) for general coding and plots.
 
-# 📬 Contact & Contributions
+# Contact & Contributions
 
 If you have questions, suggestions, or want to contribute, feel free to:
 
-- 🐛 Open an [issue](https://github.com/gabrielnegreira/aneuQPCR/issues)  
-- 🔧 Submit a pull request  
-- 🧑‍💻 Contact me via [GitHub](https://github.com/gabrielnegreira)  
-- 📧 Email me at: **gnegreira_github@proton.me**
+- Open an [issue](https://github.com/gabrielnegreira/aneuQPCR/issues)  
+- Submit a pull request  
+- Contact me via [GitHub](https://github.com/gabrielnegreira)  
+- Email me at: **gnegreira_github@proton.me**
